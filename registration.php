@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -110,33 +111,91 @@ span.price {
 </style>
 </head>
 <body>
+<?php
+$firstname = $email = $address = $city = $state = $zip = "";
+if ($_SERVER["REQUEST_METHOD"]=="POST") {
+  $firstname = test_input ($_POST["firstname"]);
+  $email = test_input ($_POST["email"]);
+  $address = test_input($_POST["address"]);
+  $zip = test_input ($_POST["zip"]);
+  $city = test_input ($_POST["city"]);
+  $state = test_input ($_POST["state"]);
+}
 
+function test_input($data){
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+?>
+<?php
+    echo "<h1>Reservation Form</h1>";
+    echo $firstname;
+    echo "<br>";
+    echo $email;
+    echo "<br>";
+    echo $address;
+    echo "<br>";
+    echo $city;
+    echo "<br>";
+    echo $state;
+    echo "<br>";
+    echo $zip;
+    echo "<br>";
+  ?> 
+  <?php
+
+  $connection = mysqli_connect("locolhost","root","","usersaccounts");
+  $db = mysqli_select_db($connection, 'users');
+
+  if(isset($_POST['insert']))
+  {
+    $firstname = $_POST['firstname'];
+    $email = $_POST['email'];
+    $address = $_POST['address'];
+    $city = $_POST['city'];
+    $state = $_POST['state'];
+    $zip = $_post['zip'];
+
+    $query = "INSERT INTO 'user' ('firstname','email','address','city','state','zip') VALUES ('$firstname','email','address','city','state','zip')";
+    $query_run = mysqli_query($connection,$query);
+
+    if($query_run)
+    {
+      echo "<script>alert('Data inserted')</script>";
+    }
+    else{
+      echo '<script>alert("Data NOT inserted ")</script>';
+    }
+  }
+  ?>
 <h2>Registration Form</h2>
 <div class="row">
   <div class="col-75">
     <div class="container">
-      <form action="registration2.php" method="post">
+      <form action="registration.php" method="post">
       
         <div class="row">
           <div class="col-50">
 
             <label for="fname"><i class="fa fa-user"></i> Full Name</label>
-            <input type="text" id="fname" name="firstname" value="<?php echo $firstname; ?>." placeholder="John M. Doe">
+            <input type="text" id="fname" name="firstname"  placeholder="John M. Doe">
             <label for="email"><i class="fa fa-envelope"></i> Email</label>
-            <input type="text" id="email" name="email" value="<?php echo $email; ?>" placeholder="john@example.com">
+            <input type="text" id="email" name="email"  placeholder="john@example.com">
             <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
-            <input type="text" id="adr" name="address" value="<?php echo $address; ?>"  placeholder="542 W. 15th Street">
+            <input type="text" id="adr" name="address"  placeholder="542 W. 15th Street">
             <label for="city"><i class="fa fa-institution"></i> City</label>
-            <input type="text" id="city" name="city" value="<?php echo $city; ?>" placeholder="New York">
+            <input type="text" id="city" name="city"  placeholder="New York">
 
             <div class="row">
               <div class="col-50">
                 <label for="state">State</label>
-                <input type="text" id="state" name="state" value="<?php echo $state; ?>" placeholder="NY">
+                <input type="text" id="state" name="state"  placeholder="NY">
               </div>
               <div class="col-50">
                 <label for="zip">Zip</label>
-                <input type="text" id="zip" name="zip" value="<?php echo $zip; ?>" placeholder="10001">
+                <input type="text" id="zip" name="zip"  placeholder="10001">
               </div>
             </div>
           </div>
